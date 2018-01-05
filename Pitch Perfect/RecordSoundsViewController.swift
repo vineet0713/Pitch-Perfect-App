@@ -22,32 +22,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        print("viewDidLoad is called!")
-        
         stopRecordingButton.isEnabled = false
     }
-    
-    // Override the viewWillAppear() function:
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        print("viewWillAppear is called!")
-    }
-    
-    // This gets called after viewWillAppear()
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        print("viewDidAppear is called!")
-    }
-    
-    
-    /*
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    */
     
     
     // Start of my code:
@@ -56,12 +32,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     // (links the pressing of the Button to a function in ViewController)
     // Target-Action (where Target is the ViewController, Action is the function)
     @IBAction func recordAudio(_ sender: Any) {
-        // print("Record Button was pressed!")
-        recordingLabel.text = "Recording in Progress!"
-        
-        stopRecordingButton.isEnabled = true
-        recordButton.isEnabled = false
-        
+        configureUI(labelText: "Recording in Progress!", recordingEnabled: false)
         
         // Instructor's code:
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
@@ -91,17 +62,19 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     // Now we need an IBAction for the "Stop Recording" Button:
     @IBAction func stopRecordingAudio(_ sender: Any) {
-        // print("Stop Recording Button was pressed!")
-        recordingLabel.text = "Tap to Record"
-        
-        recordButton.isEnabled = true
-        stopRecordingButton.isEnabled = false
-        
+        configureUI(labelText: "Tap to Record", recordingEnabled: true)
         
         // Instructor's code:
         audioRecorder.stop()
         let session = AVAudioSession.sharedInstance()
         try! session.setActive(false)
+    }
+    
+    // function to enable/disable the Buttons:
+    func configureUI(labelText: String, recordingEnabled: Bool) {
+        recordingLabel.text = labelText
+        recordButton.isEnabled = recordingEnabled
+        stopRecordingButton.isEnabled = !recordingEnabled
     }
     
     // The UIKit framework (provided by Apple) has many classes:
@@ -125,7 +98,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     // adds the function from AVAudioRecorderDelegate:
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         // used to call the 'stopRecording' segue!
-        print("audioRecorderDidFinishRecording called")
         
         if flag {
             performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
