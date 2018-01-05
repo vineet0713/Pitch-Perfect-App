@@ -16,7 +16,7 @@ import AVFoundation
 // we must specify that the RecordSoundsViewController conforms to the AVAudioRecorder delegate protocol
 // (we will implement a function from that delegate protocol, and our ViewController can act as the delegate to the AVAudioRecorder
 
-class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
+class RecordSoundsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,19 +92,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     // this property allows this ViewController to use and reference the audioRecorder in multiple places
     var audioRecorder: AVAudioRecorder!
-    
-    
-    
-    // adds the function from AVAudioRecorderDelegate:
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        // used to call the 'stopRecording' segue!
-        
-        if flag {
-            performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
-        } else {
-            print("Recording was not successful.")
-        }
-    }
     
     
     // this function is called (in THIS ViewController) once the segue above is triggered:
